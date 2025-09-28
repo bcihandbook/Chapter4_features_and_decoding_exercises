@@ -1,12 +1,7 @@
 from matplotlib import pyplot as plt
 import mne
 from mne.datasets import sample
-import numpy as np
-from pyriemann.classification import MDM
 from pyriemann.estimation import XdawnCovariances
-from sklearn.metrics import classification_report
-from sklearn.model_selection import KFold
-from sklearn.pipeline import make_pipeline
 
 
 #####################################
@@ -48,19 +43,9 @@ labels = epochs.events[:, -1]
 evoked = epochs.average()
 epochs_data = epochs.get_data()
 
-# Decoding with Xdawn + MDM
-n_components = 3  # pick some components
-cv = KFold(n_splits=10, shuffle=True, random_state=42)
-pr = np.zeros(len(labels))
-clf = make_pipeline(XdawnCovariances(n_components), MDM())
-for train_idx, test_idx in cv.split(epochs_data):
-    y_train, y_test = labels[train_idx], labels[test_idx]
-    clf.fit(epochs_data[train_idx], y_train)
-    pr[test_idx] = clf.predict(epochs_data[test_idx])
-print(classification_report(labels, pr))
-
 #####################################
 # plot the spatial patterns, 1Hz for plotting
+n_components = 3  # pick some components
 xd = XdawnCovariances(n_components)
 xd.fit(epochs_data, labels)
 info = evoked.copy().resample(1).info  # type: ignore
