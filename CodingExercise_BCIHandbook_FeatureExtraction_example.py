@@ -1,3 +1,15 @@
+"""
+Feature Extraction using XDAWN
+==============================
+
+This script demonstrates how to extract features from EEG data using the
+XDAWN algorithm, and how to visualize the spatial patterns of the extracted
+components.
+
+Author: BCI Handbook Chapter 4.3
+License: BSD (3-clause)
+"""
+
 from matplotlib import pyplot as plt
 import mne
 from mne.datasets import sample
